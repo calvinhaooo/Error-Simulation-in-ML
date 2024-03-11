@@ -8,5 +8,11 @@ Group5 project for data preparation
 1. noise
 2. outlier
 3. text
+4. duplicate
+5. label error
+
 
 ## Clean Data
+
+## Experiments
+

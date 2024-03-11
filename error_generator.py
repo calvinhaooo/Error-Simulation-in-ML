@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+from pandas import DataFrame
 
 
 def add_noise(df, column, mean=0):
@@ -26,3 +28,20 @@ def insert_special_word(text, insert_percentage=5):
         words.insert(pos, special_word)
     modified_text = ' '.join(words)
     return modified_text
+
+
+def alert_label(data: DataFrame, label_name: str, percentage=5):
+    new_data = data.copy()
+    values = data[label_name].unique()
+    total_number = int(len(data) * percentage / 100)
+    indices = np.random.choice(data.index, total_number, replace=False)
+    new_data.loc[indices, label_name] = np.random.choice(values)
+    return new_data
+
+
+def duplicates_data(data: DataFrame, percentage=3):
+    total_number = int(len(data) * percentage / 100)
+    random_rows = data.sample(n=total_number)
+    random_rows = DataFrame(random_rows)
+    new_data = pd.concat([data, random_rows])
+    return new_data
