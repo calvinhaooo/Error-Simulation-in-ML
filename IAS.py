@@ -1,16 +1,18 @@
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.decomposition import TruncatedSVD
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
-from sklearn.ensemble import BaggingClassifier
+from textblob import TextBlob
+from sklearn.cluster import KMeans
 from error_solution import *
 from data_preprocessor import select_features
 from error_generator import *
@@ -38,24 +40,19 @@ def define_training_pipeline(numerical_columns, categorical_columns):
 
 def run_pipeline(data, label, seed, test_size):
     np.random.seed(seed)
-    # data = mc_data[final_columns].dropna()
-    print(len(data))
     labels = data.pop(label)
-
     train_data, test_data, train_labels, test_labels = train_test_split(
         data, labels, test_size=test_size, random_state=seed)
     sklearn_pipeline = define_training_pipeline(numerical_columns, categorical_columns)
     model_with_transformations = sklearn_pipeline.fit(train_data, train_labels)
     pred = model_with_transformations.predict(test_data)
     prob = model_with_transformations.predict_proba(test_data)
-
-    # y_true = test_labels
+    # print("Number of unique labels in train data:", len(np.unique(train_labels)))
+    # print("Unique labels in test data:", np.unique(train_labels))
+    #
+    # print("Number of unique labels in test data:", len(np.unique(test_labels)))
+    # print("Unique labels in test data:", np.unique(test_labels))
     evaluate(y_scores=prob, y_pred=pred, y_true=test_labels)
-    # accuracy = model_with_transformations.score(test_data, test_labels)
-    # print(f"Accuracy on test data is {accuracy}")
-
-    # return accuracy
-
 
 def evaluate(y_scores, y_pred, y_true):
     auc = roc_auc_score(y_true, y_scores, average='macro', multi_class='ovo')  # or average='micro'/'weighted'
@@ -79,7 +76,12 @@ def evaluate(y_scores, y_pred, y_true):
     print(conf_matrix)
     return accuracy
 
-
+def analyze_sentiment(text):
+    # 创建一个TextBlob对象
+    blob = TextBlob(text)
+    # 使用.sentiment属性获取情感极性和主观性
+    sentiment = blob.sentiment
+    return sentiment.polarity, sentiment.subjectivity
 if __name__ == '__main__':
     # ./data/modcloth_final_data.json
     # ./data/renttherunway_final_data.json
@@ -119,10 +121,16 @@ if __name__ == '__main__':
     cleaned_data = precessed_data.dropna()
     print(cleaned_data.info())
     dirty_data = cleaned_data.copy()
-    run_pipeline(cleaned_data, label_name, 1234, 0.2)
+    # run_pipeline(cleaned_data, label_name, 1234, 0.2)
+
+    random_replace_column(dirty_data, label_name, 10)
+    print(dirty_data[label_name])
+    # 添加重复行
+    # add_duplicates(dirty_data, duplicate_percentage=5)
+    # 添加噪声
     # add_noise(dirty_data, 'verified', mean= 1)
     # 添加异常值
-    add_outliers(dirty_data, 'bra size', outlier_percentage=20, factor=3)
+    # add_outliers(dirty_data, 'bra size', outlier_percentage=20, factor=3)
     # 添加文本错误
     # dirty_data['text'] = dirty_data['text'].apply(add_noise_to_text, noise_percentage=20)
     # 添加空值
@@ -131,9 +139,13 @@ if __name__ == '__main__':
 
     # print(dirty_data['text'])
     clean_data = dirty_data.copy()
-    run_pipeline(dirty_data, label_name, 1234, 0.2)
+    # run_pipeline(dirty_data, label_name, 1234, 0.2)
 
+
+    clean_data = correct_label_errors(clean_data, label_name, numerical_columns)
+    run_pipeline(clean_data, label_name, 1234, 0.2)
     #clean
+    # 修正重复行
     # 修正文本
     # textprocess(clean_data, 'text')
     # print(clean_data.text.sample(10))
@@ -142,10 +154,9 @@ if __name__ == '__main__':
     # detectN_impute_KNN(dirty_data, numerical_columns)
     # print("after clean:", dirty_data.isnull().sum())
     # 修正outlier
-    # 会把所有的都当作离群点
-    remove_outliers_iqr(clean_data, 'bra size')
-    print(clean_data.head())
-    run_pipeline(clean_data, label_name, 1234, 0.2)
+    # remove_outliers_iqr(clean_data, 'bra size')
+    # print(clean_data.head())
+    # run_pipeline(clean_data, label_name, 1234, 0.2)
 
 # baggingclassifier
 # clean
@@ -202,3 +213,48 @@ if __name__ == '__main__':
 # Precision: 0.6291212030374973
 # Recall: 0.5821719660223292
 # F1 Score: 0.5990906639006213
+
+# AUC Score: 0.8460581307704884
+# Accuracy: 0.7788738479262672
+# Precision: 0.7084512620973679
+# Recall: 0.6376798548287126
+# F1 Score: 0.6657351788897898
+
+# labels_error
+# AUC Score: 0.5228636099238176
+# Accuracy: 0.7816820276497696
+# Precision: 0.5346751037098425
+# Recall: 0.48101152603788144
+# F1 Score: 0.5022014093331282
+
+# 使用了 KNN+LR
+# AUC Score: 0.7716307268131616
+# Accuracy: 0.8860887096774194
+# Precision: 0.5248871665688618
+# Recall: 0.414929813970849
+# F1 Score: 0.4421919999374835
+
+    ####################################################
+    # 聚类
+    # features = clean_data[['item_id', 'size', 'bra size', 'quality']]
+    # labels = clean_data[label_name]
+    #
+    # # Encoding labels if they are categorical
+    # label_encoder = LabelEncoder()
+    # encoded_labels = label_encoder.fit_transform(labels)
+    #
+    # # Creating k-NN classifier without specifying the number of neighbors
+    # knn = KNeighborsClassifier()
+    # knn.fit(features, encoded_labels)
+    # cluster_labels = knn.predict(features)
+    # print(cluster_labels)
+    # clean_data['fit'] = cluster_labels
+    # print(clean_data['fit'])
+    # run_pipeline(clean_data, label_name, 1234, 0.2)
+
+
+    # Visualizing clustering results (assuming 2D data)
+    # plt.scatter(features['item_id'], encoded_labels, c=cluster_labels, cmap='viridis', marker='o')
+    # plt.title('k-NN Clustering of Labels')
+    # plt.show()
+    ####################################################
