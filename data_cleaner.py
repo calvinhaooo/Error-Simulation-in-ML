@@ -33,6 +33,8 @@ def cluster_labels(df, label):
     knn = KNeighborsClassifier()
     knn.fit(reduced_text, encoded_labels)
     new_labels = knn.predict(reduced_text)
-    # print(cluster_labels)
     print(f"Number of label types after clustering is {len(set(new_labels))}.")
-    return new_labels
+
+    new_df = df.copy()
+    new_df[label] = new_labels
+    return new_df

@@ -1,8 +1,20 @@
+import pandas as pd
 from pandas import DataFrame
 from pandas.core.dtypes.common import is_numeric_dtype, is_string_dtype
 
 
-def select_features(label, data, alpha=0.1, beta=1e-3):
+def read_data(file_name):
+    path = "./data/" + file_name
+    if file_name.endswith('.csv'):
+        data = pd.read_csv(path)
+    elif file_name.endswith('.json'):
+        data = pd.read_json(path, lines=True)
+    else:
+        raise ValueError("Unsupported file")
+    return data
+
+
+def select_features(data, label, alpha=0.1, beta=1e-3):
     categorical_columns, numerical_columns, text_columns = [], [], []
     for column in data.columns:
         # skip label column
