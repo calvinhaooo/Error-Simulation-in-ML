@@ -9,11 +9,15 @@ def add_noise(df, column, mean=0):
     noise = np.random.normal(mean, stddev, size=len(sampled_rows))
     df.loc[sampled_rows.index, column] += noise
 
-def add_outliers(df, column, outlier_percentage=5, factor=3):
+def add_outliers(df, column, outlier_percentage, factor):
     num_outliers = int(len(df) * outlier_percentage / 100)
     outlier_indices = np.random.choice(df.index, num_outliers, replace=False)
     outliers = np.random.normal(np.mean(df[column]) * factor, np.std(df[column]) * factor, num_outliers)
+    print(df.loc[outlier_indices, column])
+    print(outliers)
     df.loc[outlier_indices, column] += outliers
+    print(df.loc[outlier_indices, column])
+
 
 def add_duplicates(df, duplicate_percentage=5):
     """
@@ -30,12 +34,6 @@ def add_duplicates(df, duplicate_percentage=5):
     duplicate_rows = df.sample(n=num_duplicates, replace=True)
     df = pd.concat([df, duplicate_rows], ignore_index=True)
 
-# def add_noise_to_text(text, noise_percentage=10):
-#     words = text.split()
-#     num_noise_words = int(len(words) * noise_percentage / 100)
-#     noise_words = ['@#$%&'] * num_noise_words
-#     noisy_text = ' '.join(words[:num_noise_words] + noise_words + words[num_noise_words:])
-#     return noisy_text
 
 def add_noise_to_text(text, noise_percentage=10):
     words = text.split()
@@ -53,9 +51,7 @@ def add_null_noise(df, label_column, null_percentage=5):
     numeric_cols = df.select_dtypes(include=[np.number]).columns
     cols_to_modify = [col for col in numeric_cols if col != label_column]
     num_nulls = int(len(df) * null_percentage / 100)
-    # 随机选择将要设置为空值的索引
     null_indices = np.random.choice(df.index, num_nulls, replace=False)
-    # 对于每一个选中的索引，随机选择一个数值列名并设置该位置的值为NaN
     for index in null_indices:
         col = np.random.choice(cols_to_modify)
         df.at[index, col] = np.nan
