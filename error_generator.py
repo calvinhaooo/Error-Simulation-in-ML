@@ -2,6 +2,9 @@ import numpy as np
 import random
 import string
 import pandas as pd
+from pandas import DataFrame
+
+
 def add_noise(df, column, mean=0):
     mc_data = df.copy(deep=True)
     stddev = np.std(mc_data[column])
@@ -9,30 +12,13 @@ def add_noise(df, column, mean=0):
     noise = np.random.normal(mean, stddev, size=len(sampled_rows))
     df.loc[sampled_rows.index, column] += noise
 
-def add_outliers(df, column, outlier_percentage, factor):
-    num_outliers = int(len(df) * outlier_percentage / 100)
-    outlier_indices = np.random.choice(df.index, num_outliers, replace=False)
-    outliers = np.random.normal(np.mean(df[column]) * factor, np.std(df[column]) * factor, num_outliers)
-    print(df.loc[outlier_indices, column])
-    print(outliers)
-    df.loc[outlier_indices, column] += outliers
-    print(df.loc[outlier_indices, column])
 
-
-def add_duplicates(df, duplicate_percentage=5):
-    """
-    Add duplicate rows to a DataFrame.
-
-    Parameters:
-        df (pandas.DataFrame): The DataFrame.
-        duplicate_percentage (float, optional): Percentage of duplicate rows to add. Defaults to 5.
-
-    Returns:
-        None
-    """
-    num_duplicates = int(len(df) * duplicate_percentage / 100)
-    duplicate_rows = df.sample(n=num_duplicates, replace=True)
-    df = pd.concat([df, duplicate_rows], ignore_index=True)
+def duplicates_data(data: DataFrame, percentage=3):
+    total_number = int(len(data) * percentage / 100)
+    random_rows = data.sample(n=total_number)
+    random_rows = DataFrame(random_rows)
+    new_data = pd.concat([data, random_rows])
+    return new_data
 
 
 def add_noise_to_text(text, noise_percentage=10):
@@ -46,6 +32,7 @@ def add_noise_to_text(text, noise_percentage=10):
         noise_char = random.choice(characters)
         text = text[:index] + noise_char + text[index:]
     return text
+
 
 def add_null_noise(df, label_column, null_percentage=5):
     numeric_cols = df.select_dtypes(include=[np.number]).columns
@@ -78,19 +65,6 @@ def random_replace_column(df, column, num_labels):
         outliers = np.random.normal(np.mean(df[column]) * 2, np.std(df[column]) * 3, num_labels)
         df.loc[label_indices, column] += outliers
 
-import numpy as np
-import pandas as pd
-from pandas import DataFrame
-
-
-def add_noise(df, column, mean=0):
-    if df[column].dtypes == 'float64':
-        mc_data = df.copy(deep=True)
-        stddev = np.std(mc_data[column])
-        sampled_rows = mc_data.sample(frac=0.3)
-        noise = np.random.normal(mean, stddev, size=len(sampled_rows))
-        df.loc[sampled_rows.index, column] += noise
-
 
 def add_outliers(df, column, outlier_percentage=5, factor=3):
     num_outliers = int(len(df) * outlier_percentage / 100)
@@ -116,12 +90,4 @@ def alert_label(data: DataFrame, label_name: str, percentage=5):
     total_number = int(len(data) * percentage / 100)
     indices = np.random.choice(data.index, total_number, replace=False)
     new_data.loc[indices, label_name] = np.random.choice(values)
-    return new_data
-
-
-def duplicates_data(data: DataFrame, percentage=3):
-    total_number = int(len(data) * percentage / 100)
-    random_rows = data.sample(n=total_number)
-    random_rows = DataFrame(random_rows)
-    new_data = pd.concat([data, random_rows])
     return new_data

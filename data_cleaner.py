@@ -1,17 +1,20 @@
 import re
+
 import numpy as np
-import pandas as pd
+from scipy import signal
+from sklearn.decomposition import TruncatedSVD
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.impute import KNNImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import LabelEncoder
-from scipy import signal
 
 
-def textprocess(df,column):
-    pattern=r'[^a-zA-Z0-9\s]+'
-    df[column]=df[column].apply(lambda x: re.sub(pattern, '', x).strip())
+def textprocess(df, column):
+    pattern = r'[^a-zA-Z0-9\s]+'
+    df[column] = df[column].apply(lambda x: re.sub(pattern, '', x).strip())
+
 
 # ??
 def remove_outliers_iqr(df, column):
@@ -27,7 +30,7 @@ def remove_outliers_iqr(df, column):
     # df.drop(df[(df[column] < lower_bound) | (df[column] > upper_bound)].index, inplace=True)
 
 
-def detectN_impute_KNN(df,numerical_columns):
+def detect_impute_KNN(df):
     # detect which colum has Null
     missing_values_count = df.isnull().sum()
     print("The number of Null for each column：")
@@ -41,8 +44,11 @@ def detectN_impute_KNN(df,numerical_columns):
         df[numeric_cols] = imputed_data
     else:
         print("There is no numeric columns we can fill in")
+
+
 def remove_noise(df, column, kernel_size=3):
     df[column] = signal.medfilt(df[column].values, kernel_size=kernel_size)
+
 
 def detect_duplicates(df):
     """
@@ -56,6 +62,7 @@ def detect_duplicates(df):
     """
     duplicate_rows = df[df.duplicated()]
     return duplicate_rows
+
 
 def correct_label_errors(data, label_name, features_columns):
     logistic_regression = LogisticRegression()
@@ -86,10 +93,6 @@ def correct_label_errors(data, label_name, features_columns):
     data[label_name] = predicted_labels
 
     return data
-from sklearn.decomposition import TruncatedSVD
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import LabelEncoder
 
 
 def remove_duplication(df, method='simple'):
