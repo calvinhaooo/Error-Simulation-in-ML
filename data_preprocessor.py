@@ -14,7 +14,7 @@ def read_data(file_name):
     return data
 
 
-def select_features(data, label, alpha=0.1, beta=1e-3):
+def select_features(data, label, alpha=0.1, beta=1e-3, max_categories=10):
     categorical_columns, numerical_columns, text_columns = [], [], []
     for column in data.columns:
         # skip label column
@@ -30,7 +30,7 @@ def select_features(data, label, alpha=0.1, beta=1e-3):
 
         data_type = data[column].dtype
         feature_num = data[column].nunique()
-        if is_numeric_dtype(data_type):
+        if is_numeric_dtype(data_type) and feature_num > max_categories:
             numerical_columns.append(column)
         elif feature_num <= len(data) * beta:
             categorical_columns.append(column)

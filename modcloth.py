@@ -1,11 +1,15 @@
 from sklearn.compose import ColumnTransformer
 from sklearn.feature_extraction.text import *
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, learning_curve
+from sklearn.naive_bayes import BernoulliNB
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.svm import SVC
 
+from data_cleaner import textprocess, remove_outliers_iqr
 from data_preprocessor import *
 from error_generator import *
 
@@ -15,14 +19,15 @@ def define_training_pipeline(numerical_columns, categorical_columns) -> Pipeline
     feature_transformation = ColumnTransformer(transformers=[
         ('numerical_features', StandardScaler(), numerical_columns),
         ('categorical_features', OneHotEncoder(handle_unknown='ignore'), categorical_columns),
-        ('textual_features', TfidfVectorizer(stop_words='english'), 'text'),
+        ('textual_features', TfidfVectorizer(), 'text'),
         # ('other_features', 'passthrough', other_columns)
     ], remainder="drop")
 
     pipeline = Pipeline([
         ('features', feature_transformation),
-        # ('classifier', SGDClassifier(loss='log_loss', penalty='l2', max_iter=1000, random_state=seed))
-        ('classifier', LogisticRegression(multi_class='multinomial', max_iter=500))
+        # ('classifier', SGDClassifier(loss='log_loss', penalty='l2', max_iter=500))
+        ('classifier', SGDClassifier(loss='log_loss'))
+        # ('classifier', LogisticRegression(multi_class='multinomial', max_iter=500))
         # ('classifier', KNeighborsClassifier())  # slow
         # ('classifier', MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500)) # slow
         # ('classifier', BernoulliNB())
@@ -66,22 +71,28 @@ def evaluate(y_scores, y_pred, y_true):
 
 
 if __name__ == '__main__':
-    mc_data = read_data(file_name='modcloth_final_data.json')
+    # dataframe = read_data(file_name='modcloth_final_data.json')
+    dataframe = read_data(file_name='renttherunway_final_data.json')
+
+    # mc_data = read_data(file_name='dc-crimes-search-results.csv')
+    # mc_data = mc_data.drop(columns=['offensekey', 'offense-text', 'offensekey', 'OFFENSE', 'ucr-rank'])
+    # label_name = 'NEIGHBORHOOD_CLUSTER'
+    # label_name = 'offensegroup'
     label_name = 'fit'
 
-    categories, numerics, texts = select_features(mc_data, label_name, alpha=0.2)
+    categories, numerics, texts = select_features(dataframe, label_name, alpha=0.2, max_categories=20)
     print("Categorical columns:", categories)
     print("Numerical columns:", numerics)
     print("Text columns:", texts)
 
     text_column = 'text'
-    merge_text(mc_data, texts, text_column)
+    merge_text(dataframe, texts, text_column)
 
     final_columns = categories + numerics + [text_column, label_name]
     print("Final columns:", final_columns)
 
     # simple clean
-    precessed_data = mc_data[final_columns]
+    precessed_data = dataframe[final_columns]
     print(len(precessed_data))
     clean_data = precessed_data.dropna()
     clean_data = clean_data.drop_duplicates()
@@ -96,7 +107,16 @@ if __name__ == '__main__':
         clean_data, labels, test_size=test_size, random_state=seed)
 
     dirty_data = train_data.copy()
-    add_outliers(dirty_data, column='size', outlier_percentage=20)
 
-    run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories)
-    run_pipeline((dirty_data, train_labels), (test_data, test_labels), numerics, categories)
+    add_outliers(dirty_data, numerical_columns=numerics, categorical_columns=categories, outlier_percentage=25,
+                 factor=10)
+    # add_noise_to_text(dirty_data, percentage=90, noise_percentage=40)
+    cleaned_data = dirty_data.copy()
+    # textprocess(cleaned_data, 'text')
+    for column in numerics:
+        remove_outliers_iqr(cleaned_data, column)
+    print(cleaned_data)
+    # run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories)
+    # run_pipeline((dirty_data, train_labels), (test_data, test_labels), numerics, categories)
+
+    run_pipeline((cleaned_data, train_labels), (test_data, test_labels), numerics, categories)

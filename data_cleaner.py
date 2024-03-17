@@ -1,3 +1,6 @@
+import re
+
+import numpy as np
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.neighbors import KNeighborsClassifier
@@ -38,3 +41,9 @@ def cluster_labels(df, label):
     new_df = df.copy()
     new_df[label] = new_labels
     return new_df
+
+
+def textprocess(df, column):
+    pattern = r'[^a-zA-Z0-9\s]+'
+    df[column] = df[column].apply(lambda x: re.sub(pattern, '', x).strip())
+
