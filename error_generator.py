@@ -99,4 +99,4 @@ def generate_point_outliers(df: DataFrame, numerical_columns, categorical_column
     for column in categorical_columns:
         df = alert_label(df, column, indices=outlier_indices)
     outliers['text'] = 'text'
-    return outliers
+    return outliers, outlier_indices

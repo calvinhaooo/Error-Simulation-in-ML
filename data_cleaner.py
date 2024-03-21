@@ -183,7 +183,7 @@ def detect_point_outliers(transformed_data, n=6, percentile=1, visualization=Fal
     scores = isolation_forest.decision_function(reduced_data)
     if visualization:
         # Draw Score Distribution
-        plt.hist(scores, bins=50, color='blue', alpha=0.7)
+        plt.hist(scores, bins=int(len(scores)/600), color='blue', alpha=0.7)
         plt.xlabel('Anomaly Score')
         plt.ylabel('Frequency')
         plt.title('Anomaly Score Distribution')
@@ -192,10 +192,8 @@ def detect_point_outliers(transformed_data, n=6, percentile=1, visualization=Fal
     threshold = np.percentile(scores, percentile)
     print(threshold)
     outlier_pos = np.where(scores < threshold)
-    print(outlier_pos)
-    print(len(outlier_pos[0]))
 
-    return outlier_pos
+    return outlier_pos[0]
     # outliers_num = len(outliers)
     # count = np.sum(error[0] < outliers_num)
     # print(outliers_num, count)
