@@ -12,11 +12,24 @@ Group5 project for data preparation
 3. text
 4. duplicate
 5. label error
+6. missing value
 
 
 ## Clean Data
 
 ## Experiments
+回归
+noise: x
+outlier: v
+duplicate: 
+missing: 
+label error: 
+
+分类
+outlier:
+duplicate: 
+missing: 
+label error: v
 
 [//]: # (# without bra size)
 

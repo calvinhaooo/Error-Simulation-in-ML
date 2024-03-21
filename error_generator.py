@@ -1,6 +1,7 @@
-import numpy as np
 import random
 import string
+
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
@@ -21,17 +22,20 @@ def duplicates_data(data: DataFrame, percentage=3):
     return new_data
 
 
-def add_noise_to_text(text, noise_percentage=10):
-    words = text.split()
-    num_noise_chars = int(len(text) * noise_percentage / 100)
+def add_noise_to_text(df: DataFrame, percentage=10, noise_percentage=10):
+    num_outliers = int(len(df) * percentage / 100)
+    indices = np.random.choice(df.index, num_outliers, replace=False)
+    characters = string.punctuation + string.digits
+    for i in indices:
+        text = df.loc[i, 'text']
+        num_noise_chars = int(len(text) * noise_percentage / 100)
 
-    # characters = ['~!@#$%^&*()'] + string.punctuation
-    characters = string.punctuation
-    for _ in range(num_noise_chars):
-        index = random.randint(0, len(text) - 1)
-        noise_char = random.choice(characters)
-        text = text[:index] + noise_char + text[index:]
-    return text
+        for _ in range(num_noise_chars):
+            index = random.randint(0, len(text) - 1)
+            noise_char = random.choice(characters)
+            text = text[:index] + noise_char + text[index:]
+
+        df.loc[i, 'text'] = text
 
 
 def add_null_noise(df, label_column, null_percentage=5):
@@ -66,28 +70,33 @@ def random_replace_column(df, column, num_labels):
         df.loc[label_indices, column] += outliers
 
 
-def add_outliers(df, column, outlier_percentage=5, factor=3):
+def add_outliers(df, numerical_columns, categorical_columns, outlier_percentage=5, factor=3):
     num_outliers = int(len(df) * outlier_percentage / 100)
+    print(num_outliers)
     outlier_indices = np.random.choice(df.index, num_outliers, replace=False)
-    outliers = np.random.normal(np.mean(df[column]) * factor, np.std(df[column]) * factor, num_outliers)
-    df.loc[outlier_indices, column] += outliers
+    # outliers = np.random.normal(np.mean(df[column]) * factor, np.std(df[column]) * factor, num_outliers)
+    # outliers = df.loc[outlier_indices, column]
+    df.loc[outlier_indices, numerical_columns] *= factor
+    for column in categorical_columns:
+        df = alert_label(df, column, indices=outlier_indices)
 
 
-def insert_special_word(text, insert_percentage=5):
-    special_word = '@#$%&'
-    words = text.split()
-    num_to_insert = int(len(words) * insert_percentage / 100)
-    positions_to_insert = np.random.choice(range(len(words)), num_to_insert, replace=False)
-    for pos in positions_to_insert:
-        words.insert(pos, special_word)
-    modified_text = ' '.join(words)
-    return modified_text
-
-
-def alert_label(data: DataFrame, label_name: str, percentage=5):
+def alert_label(data: DataFrame, label_name: str, percentage=5, indices=None):
     new_data = data.copy()
     values = data[label_name].unique()
-    total_number = int(len(data) * percentage / 100)
-    indices = np.random.choice(data.index, total_number, replace=False)
+    if indices is None:
+        total_number = int(len(data) * percentage / 100)
+        indices = np.random.choice(data.index, total_number, replace=False)
     new_data.loc[indices, label_name] = np.random.choice(values)
     return new_data
+
+
+def generate_point_outliers(df: DataFrame, numerical_columns, categorical_columns, percentage=5, factor=0.5):
+    num_outliers = int(len(df) * percentage / 100)
+    outlier_indices = np.random.choice(df.index, num_outliers, replace=False)
+    outliers = df.loc[outlier_indices].copy()
+    outliers[numerical_columns] *= factor
+    for column in categorical_columns:
+        df = alert_label(df, column, indices=outlier_indices)
+    outliers['text'] = 'text'
+    return outliers, outlier_indices
