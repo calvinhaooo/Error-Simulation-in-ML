@@ -1,0 +1,6 @@
+Problems 1:
+
+Date  entry is inconsistent
+Solutions:
+- ignore it (set false inputs to NaT)
+- convert time slots correctly (so the dates are only by day/month/year)
