@@ -134,23 +134,6 @@ def cluster_labels(df, label):
     return new_df
 
 
-# def detect_outliers(X, categories):
-#     X = X.drop(['text'], axis=1)
-#     onehot = OneHotEncoder()
-#     X = onehot.fit_transform(X[categories])
-#     # 创建Isolation Forest模型
-#     model = IsolationForest(contamination=0.1)
-#
-#     # 使用模型拟合数据
-#     model.fit(X)
-#
-#     # 预测异常值
-#     outliers = model.predict(X)
-#     # print(outliers)
-#     counter = Counter(outliers)
-#     print("元素计数:", counter)
-
-
 def merge_outliers(original_data, outlier_data, feature_transformer, visualization=False):
     # print(outlier_data)
     outliers_num = len(outlier_data)
@@ -163,8 +146,10 @@ def merge_outliers(original_data, outlier_data, feature_transformer, visualizati
         reduced_data = svd.fit_transform(transformed_data)
         # visualization
         plt.figure(figsize=(8, 6))
-        plt.scatter(reduced_data[outliers_num:, 0], reduced_data[outliers_num:, 1], s=0.2, c='blue', alpha=0.1)
-        plt.scatter(reduced_data[:outliers_num, 0], reduced_data[:outliers_num, 1], s=10, c='red', alpha=0.5)
+        plt.scatter(reduced_data[outliers_num:, 0], reduced_data[outliers_num:, 1], s=1e3 / outliers_num, c='blue',
+                    alpha=0.02)
+        plt.scatter(reduced_data[:outliers_num, 0], reduced_data[:outliers_num, 1], s=1e4 / outliers_num, c='red',
+                    alpha=0.3)
         plt.xlabel('Principal Component 1')
         plt.ylabel('Principal Component 2')
         plt.title('SVD Reduced Data')
@@ -183,17 +168,14 @@ def detect_point_outliers(transformed_data, n=6, percentile=1, visualization=Fal
     scores = isolation_forest.decision_function(reduced_data)
     if visualization:
         # Draw Score Distribution
-        plt.hist(scores, bins=int(len(scores)/600), color='blue', alpha=0.7)
+        plt.hist(scores, bins=int(len(scores) / 600), color='blue', alpha=0.7)
         plt.xlabel('Anomaly Score')
         plt.ylabel('Frequency')
         plt.title('Anomaly Score Distribution')
         plt.show()
 
     threshold = np.percentile(scores, percentile)
-    print(threshold)
+    print('threshold score:', threshold)
     outlier_pos = np.where(scores < threshold)
 
     return outlier_pos[0]
-    # outliers_num = len(outliers)
-    # count = np.sum(error[0] < outliers_num)
-    # print(outliers_num, count)
