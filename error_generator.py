@@ -91,11 +91,15 @@ def alert_label(data: DataFrame, label_name: str, percentage=5, indices=None):
     return new_data
 
 
-def generate_point_outliers(df: DataFrame, numerical_columns, categorical_columns, percentage=5, factor=0.5):
+def generate_multivariate_outliers(df: DataFrame, numerical_columns, categorical_columns, percentage=5, factors=None):
+    if factors is None:
+        factors = [0.5]
     num_outliers = int(len(df) * percentage / 100)
     outlier_indices = np.random.choice(df.index, num_outliers, replace=False)
     outliers = df.loc[outlier_indices].copy()
-    outliers[numerical_columns] *= factor
+    random_matrix = np.random.choice(factors, size=outliers[numerical_columns].shape)
+    outliers[numerical_columns] *= random_matrix
+
     for column in categorical_columns:
         df = alert_label(df, column, indices=outlier_indices)
     outliers['text'] = 'text'
