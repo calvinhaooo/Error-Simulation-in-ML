@@ -1,8 +1,11 @@
+import warnings
+
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.decomposition import TruncatedSVD
 from sklearn.ensemble import IsolationForest
+from sklearn.exceptions import DataConversionWarning
 from sklearn.feature_extraction.text import *
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score
@@ -33,7 +36,7 @@ def define_training_pipeline(numerical_columns, categorical_columns) -> Pipeline
         ('features', feature_transformation),
         ('reduction', TruncatedSVD(n_components=64)),
         # ('classifier', SGDClassifier(loss='log_loss', penalty='l2', max_iter=500))
-        # ('classifier', SGDClassifier(loss='log_loss'))
+        ('classifier', SGDClassifier(loss='log_loss', random_state=42))
         # ('classifier', LogisticRegression(multi_class='multinomial', max_iter=500))
         # ('classifier', KNeighborsClassifier())  # slow
         # ('classifier', MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=100))  # slow
@@ -78,17 +81,19 @@ def evaluate(y_scores, y_pred, y_true):
 
 
 if __name__ == '__main__':
-    dataframe = read_data(file_name='modcloth_final_data.json')
-    # dataframe = read_data(file_name='renttherunway_final_data.json')
+    warnings.filterwarnings("ignore", category=DataConversionWarning)
 
-    # mc_data = read_data(file_name='dc-crimes-search-results.csv')
-    # mc_data = mc_data.drop(columns=['offensekey', 'offense-text', 'offensekey', 'OFFENSE', 'ucr-rank'])
-    # label_name = 'NEIGHBORHOOD_CLUSTER'
-    # label_name = 'offensegroup'
+    # dataframe = read_data(file_name='modcloth_final_data.json')
+    dataframe = read_data(file_name='renttherunway_final_data.json')
+
     label_name = 'fit'
-    # parse_date(dataframe, 'review_date')
+
+    parse_date(dataframe, 'review_date')
+    dataframe['weight'] = pd.to_numeric(dataframe['weight'].str.replace('lbs', '').astype(float))
     dataframe['height'] = dataframe['height'].apply(convert_height_to_number)
-    dataframe['cup size'] = dataframe['cup size'].apply(convert_cup_size_to_cms)
+
+    # dataframe['height'] = dataframe['height'].apply(convert_height_to_number)
+    # dataframe['cup size'] = dataframe['cup size'].apply(convert_cup_size_to_cms)
 
     categories, numerics, texts = select_features(dataframe, label_name, alpha=0.2, max_categories=12)
     print("Categorical columns:", categories)
@@ -103,11 +108,12 @@ if __name__ == '__main__':
 
     # simple clean
     precessed_data = dataframe[final_columns]
-    print(len(precessed_data))
+    print('Original rows:', len(precessed_data))
     clean_data = precessed_data.dropna()
     clean_data = clean_data.drop_duplicates()
-    print(len(clean_data))
+    print('Simply cleaned rows:', len(clean_data))
 
+    # define random seed
     seed = 1234
     test_size = 0.2
     np.random.seed(seed)
@@ -116,26 +122,24 @@ if __name__ == '__main__':
     train_data, test_data, train_labels, test_labels = train_test_split(
         clean_data, labels, test_size=test_size, random_state=seed)
 
+    # run original train set
+    run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories)
+    # generate dirty dataset
     dirty_data = train_data.copy()
-
     feature_transformation = ColumnTransformer(transformers=[
         ('numerical_features', StandardScaler(), numerics),
         ('categorical_features', OneHotEncoder(handle_unknown='ignore'), categories),
         ('textual_features', TfidfVectorizer(), 'text'),
-        # ('other_features', 'passthrough', other_columns)
     ], remainder="drop")
-    outliers, indices = generate_point_outliers(dirty_data, numerics, categories, percentage=10, factor=0.5)
-    # label_options = ['small', 'fit', 'large']
-    # outlier_labels = np.random.choice(train_labels, len(outliers))
-    # outlier_labels = train_labels.loc[indices]
-    # print(outlier_labels)
+
+    outliers, indices = generate_multivariate_outliers(dirty_data, numerics, categories, percentage=1, factors=[1 / 3, 3])
     outlier_labels = np.random.choice(['small', 'fit', 'large'], size=len(outliers))
     outlier_labels = DataFrame(outlier_labels)
     dirty_data, transformed_data = merge_outliers(dirty_data, outliers, feature_transformation, visualization=False)
-    p = len(outliers) / len(dirty_data) * 100
-    outlier_pos = detect_point_outliers(transformed_data, percentile=p, visualization=False)
+    dirty_labels = pd.concat([outlier_labels, train_labels])
 
-    # print(outlier_pos)
+    run_pipeline((dirty_data, dirty_labels), (test_data, test_labels), numerics, categories)
+
     # add_outliers(dirty_data, numerical_columns=numerics, categorical_columns=categories,
     #              outlier_percentage=25, factor=10)
     # add_noise_to_text(dirty_data, percentage=90, noise_percentage=40)
@@ -144,15 +148,17 @@ if __name__ == '__main__':
     # textprocess(cleaned_data, 'text')
     # for column in numerics:
     #     remove_outliers_iqr(cleaned_data, column)
-    #
-    # detect_impute_KNN(cleaned_data)
-    # print(cleaned_data)
-    # print(len(clean_data))
-    # print(train_labels)
-    dirty_labels = pd.concat([outlier_labels, train_labels])
-    # print(dirty_data)
-    # print(dirty_labels)
-    run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories)
-    run_pipeline((dirty_data, dirty_labels), (test_data, test_labels), numerics, categories)
 
-    # run_pipeline((cleaned_data, train_labels), (test_data, test_labels), numerics, categories)
+    # clean the dirty data
+    clean_data = dirty_data.reset_index(drop=True)
+    clean_labels = dirty_labels.reset_index(drop=True)
+
+    p = len(outliers) / len(dirty_data) * 100
+    outlier_pos = detect_point_outliers(transformed_data, percentile=p, visualization=False)
+    detected_outliers_num = np.sum(outlier_pos < len(outliers))
+    print('Detected generated outliers percent:', detected_outliers_num / len(outliers))
+
+    cleaned_data = clean_data.drop(index=outlier_pos)
+    cleaned_labels = clean_labels.drop(index=outlier_pos)
+
+    run_pipeline((cleaned_data, cleaned_labels), (test_data, test_labels), numerics, categories)
