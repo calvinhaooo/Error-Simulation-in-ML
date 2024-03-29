@@ -18,14 +18,14 @@ Group5 project for data preparation
 ## Clean Data
 
 ## Experiments
-回归
+regression
 noise: x
 outlier: v
 duplicate: 
 missing: 
 label error: 
 
-分类
+classification
 outlier:
 duplicate: 
 missing: 
