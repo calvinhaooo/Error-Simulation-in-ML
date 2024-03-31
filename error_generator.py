@@ -70,7 +70,7 @@ def random_replace_column(df, column, num_labels):
         df.loc[label_indices, column] += outliers
 
 
-def add_outliers(df, numerical_columns, categorical_columns, outlier_percentage=5, factor=3):
+def add_univariate_outliers(df, numerical_columns, categorical_columns, outlier_percentage=5, factor=3):
     num_outliers = int(len(df) * outlier_percentage / 100)
     print(num_outliers)
     outlier_indices = np.random.choice(df.index, num_outliers, replace=False)

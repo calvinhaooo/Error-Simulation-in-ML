@@ -1,24 +1,17 @@
+import time
 import warnings
 
-import numpy as np
-import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.decomposition import TruncatedSVD
-from sklearn.ensemble import IsolationForest
 from sklearn.exceptions import DataConversionWarning
 from sklearn.feature_extraction.text import *
-from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score
-from sklearn.model_selection import train_test_split, learning_curve
-from sklearn.naive_bayes import BernoulliNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
 
-from data_cleaner import textprocess, remove_outliers_iqr, detect_impute_knn, merge_outliers, detect_point_outliers
+from data_cleaner import merge_outliers, detect_multivariate_outliers
 from data_preprocessor import *
 from error_generator import *
 
@@ -132,7 +125,8 @@ if __name__ == '__main__':
         ('textual_features', TfidfVectorizer(), 'text'),
     ], remainder="drop")
 
-    outliers, indices = generate_multivariate_outliers(dirty_data, numerics, categories, percentage=1, factors=[1 / 3, 3])
+    outliers, indices = generate_multivariate_outliers(dirty_data, numerics, categories, percentage=3,
+                                                       factors=[1 / 2, 2])
     outlier_labels = np.random.choice(['small', 'fit', 'large'], size=len(outliers))
     outlier_labels = DataFrame(outlier_labels)
     dirty_data, transformed_data = merge_outliers(dirty_data, outliers, feature_transformation, visualization=False)
@@ -150,15 +144,21 @@ if __name__ == '__main__':
     #     remove_outliers_iqr(cleaned_data, column)
 
     # clean the dirty data
+    clean_start_time = time.time()
     clean_data = dirty_data.reset_index(drop=True)
     clean_labels = dirty_labels.reset_index(drop=True)
 
     p = len(outliers) / len(dirty_data) * 100
-    outlier_pos = detect_point_outliers(transformed_data, percentile=p, visualization=False)
+    outlier_pos = detect_multivariate_outliers(transformed_data, percentile=p, visualization=False)
     detected_outliers_num = np.sum(outlier_pos < len(outliers))
     print('Detected generated outliers percent:', detected_outliers_num / len(outliers))
 
+    clean_end_time = time.time()
     cleaned_data = clean_data.drop(index=outlier_pos)
     cleaned_labels = clean_labels.drop(index=outlier_pos)
 
     run_pipeline((cleaned_data, cleaned_labels), (test_data, test_labels), numerics, categories)
+    train_end_time = time.time()
+    print(
+        f'Cleaning data costs {clean_end_time - clean_start_time}s\n'
+        f'Training data costs {train_end_time - clean_end_time}s')

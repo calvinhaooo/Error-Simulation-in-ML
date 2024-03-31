@@ -35,7 +35,7 @@ def remove_outliers_iqr(df, column):
 
 def detect_impute_knn(df):
     # detect which colum has Null
-    missing_values_count = df.isnull().sum()
+    missing_values_count = df.isna().sum()
     print("The number of Null for each column：")
     print(missing_values_count)
     print("\nThe number of all null:", missing_values_count.sum())
@@ -159,7 +159,7 @@ def merge_outliers(original_data, outlier_data, feature_transformer, visualizati
     return merged_data, transformed_data
 
 
-def detect_point_outliers(transformed_data, n=6, percentile=1, visualization=False):
+def detect_multivariate_outliers(transformed_data, n=6, percentile=1, visualization=False):
     svd = TruncatedSVD(n_components=n)
     reduced_data = svd.fit_transform(transformed_data)
 
