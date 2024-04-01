@@ -27,23 +27,12 @@ Group5 project for data preparation
 3. missing: 
 4. label error:
    For label errors, we can use `modify_labels_to_negative(labels, percentage)` in `error_genertor.py` to simulate these errors. The experiment is based on IMDb dataset, we wanna see how label errors can influence the ML pipeline training. The parameter percentage we set is 25 and 50, we gonna change 25% or 50% negative labels into positive to simulate these error. Then, we can use `clean_bc_label_error(train_data, train_labels)` to detect these errors in `data_cleaner.py`. Then we can get the data is pruned, and substitute it as the correct label.
+   <center class="half">
+      <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="300" height="200">
+      <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8382f130-93fd-4326-931a-bd2a4e3af27b" width="300" height="200">
+      <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/e6ce9689-1c1c-40d4-b8d0-af922c4f2586" width="300" height="200">
+   </center>
 
-<div style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap;">
-  <div style="text-align:center; flex:1; margin:10px;">
-    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="300" height="200">
-    <p>Before Modification</p>
-  </div>
-
-  <div style="text-align:center; flex:1; margin:10px;">
-    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8382f130-93fd-4326-931a-bd2a4e3af27b" width="300" height="200">
-    <p>After Modification</p>
-  </div>
-
-  <div style="text-align:center; flex:1; margin:10px;">
-    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/e6ce9689-1c1c-40d4-b8d0-af922c4f2586" width="300" height="200">
-    <p>After cleaned</p>
-  </div>
-</div>
 
 
 
