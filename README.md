@@ -1,7 +1,10 @@
 # Error-Simulation-in-ML
 Group5 project for data preparation
 ## The general process of our project 
-![image](https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/968f96a2-f8e9-4fd1-a071-318abfe7beda)
+   <div align=center>
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/28eabd67-7b1a-42f0-8910-8f19ed8cb513">
+   <p>The workflow of our project</p>
+   </div>
 
 ## Processing
 
@@ -38,7 +41,7 @@ Group5 project for data preparation
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/e6ce9689-1c1c-40d4-b8d0-af922c4f2586" width="400" height="200">
    <p>After cleaned</p>
 </div>
-   After using clean_bc_label_error function to detect the error, we will get the confidence of every errors. According to this, we can correct it. The result is below:
+   After using `clean_bc_label_error` function to detect the error, we will get the confidence of every errors. According to this, we can correct it. The result is below:
    <p>&nbsp;</p>
    <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/f5706c61-cf22-4bdc-81c1-970e1af3b196" width="800" height="200">
