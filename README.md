@@ -30,10 +30,8 @@ Group5 project for data preparation
 
 <center class="half">
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="400" height="200">
-
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8382f130-93fd-4326-931a-bd2a4e3af27b" width="400" height="200">
-   <p>Before Modification</p>
-   <p>After Modification</p>
+   <p>Before Modification                                                   After Modification</p>
 </center>
 <center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/e6ce9689-1c1c-40d4-b8d0-af922c4f2586" width="400" height="200">
