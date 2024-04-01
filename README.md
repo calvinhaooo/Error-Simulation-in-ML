@@ -39,6 +39,7 @@ Group5 project for data preparation
    <p>After cleaned</p>
 </div>
    After using clean_bc_label_error function to detect the error, we will get the confidence of every errors. According to this, we can correct it. The result is below:
+   <p>&nbsp;</p>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/f5706c61-cf22-4bdc-81c1-970e1af3b196" width="800" height="200">
 
 
