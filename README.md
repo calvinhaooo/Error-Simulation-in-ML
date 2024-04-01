@@ -6,11 +6,11 @@ create “bad” instances of data, which will help in evaluating the robustness
 ### Details: 
 We aim to build an ML pipeline with the necessary preprocessing and cleaning operations, as well as various functions to inject non-malicious errors into the data. These errors will expose the weakness as well as help increase the robustness of the model.  
 ## The general process of our project 
-### Divide members into sub-groups for each dataset (Divide and conquer)
-### Apply preprocessing and data cleaning
-### Introduce errors into the datasets
-### Adapt preprocessing and cleaning operations
-### Merge sub-groups, compare results, refine successful adaptations 
+*  Divide members into sub-groups for each dataset (Divide and conquer)
+*  Apply preprocessing and data cleaning
+*  Introduce errors into the datasets
+*  Adapt preprocessing and cleaning operations
+*  Merge sub-groups, compare results, refine successful adaptations 
    <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/04545085-97d0-4b3c-acd4-5c8691534c94">
    <p>The workflow of our project</p>
