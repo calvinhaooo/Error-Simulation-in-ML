@@ -2,7 +2,7 @@
 Group5 project for data preparation
 ## The general process of our project 
    <div align=center>
-   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/28eabd67-7b1a-42f0-8910-8f19ed8cb513">
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/04545085-97d0-4b3c-acd4-5c8691534c94">
    <p>The workflow of our project</p>
    </div>
 
