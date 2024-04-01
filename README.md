@@ -30,17 +30,17 @@ Group5 project for data preparation
 
 <div style="display:flex; justify-content:center; align-items:center;">
   <div style="text-align:center; margin-right: 20px;">
-    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="300" height="200">
+    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="200" height="200">
     <p>Before Modification</p>
   </div>
 
   <div style="text-align:center; margin-right: 20px;">
-    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8382f130-93fd-4326-931a-bd2a4e3af27b" width="300" height="200">
+    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8382f130-93fd-4326-931a-bd2a4e3af27b" width="200" height="200">
     <p>After Modification</p>
   </div>
 
   <div style="text-align:center;">
-    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/e6ce9689-1c1c-40d4-b8d0-af922c4f2586" width="300" height="200">
+    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/e6ce9689-1c1c-40d4-b8d0-af922c4f2586" width="200" height="200">
     <p>After cleaned</p>
   </div>
 </div>
