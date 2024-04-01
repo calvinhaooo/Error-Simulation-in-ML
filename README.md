@@ -18,18 +18,15 @@ Group5 project for data preparation
 ## Clean Data
 
 ## Experiments
-regression
-noise: x
-outlier: v
-duplicate: 
-missing: 
-label error: 
+* regression
 
-classification
+
+* classification
 outlier:
 duplicate: 
 missing: 
-label error: v
+** label error
+
 
 [//]: # (# without bra size)
 
