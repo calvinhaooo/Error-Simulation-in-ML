@@ -104,3 +104,22 @@ def generate_multivariate_outliers(df: DataFrame, numerical_columns, categorical
         df = alert_label(df, column, indices=outlier_indices)
     outliers['text'] = 'text'
     return outliers, outlier_indices
+    
+def modify_labels_to_negative(labels, percentage=25):
+    """
+    Modify a percentage of labels to negative.
+
+    Args:
+    labels (pandas.Series): The series containing labels.
+    percentage (float, optional): Percentage of labels to modify. Defaults to 20.
+
+    Returns:
+    pandas.Series: Series with modified labels.
+    """
+    positive_indices = labels[labels == 'positive'].index
+    num_to_change = int(len(positive_indices) * percentage / 100)
+    indices_to_change = np.random.choice(positive_indices, num_to_change, replace=False)
+    labels_modified = labels.copy()
+    labels_modified.loc[indices_to_change] = 'negative'
+    return labels_modified
+
