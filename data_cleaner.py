@@ -12,7 +12,8 @@ from sklearn.impute import KNNImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import LabelEncoder
-
+from cleanlab.classification import CleanLearning
+from scipy import signal
 
 def textprocess(df, column):
     pattern = r'[^a-zA-Z0-9\s]+'
@@ -179,3 +180,24 @@ def detect_multivariate_outliers(transformed_data, n=6, percentile=1, visualizat
     outlier_pos = np.where(scores < threshold)
 
     return outlier_pos[0]
+    
+def clean_bc_label_error(train_data, train_labels):
+
+    label_encoder = LabelEncoder()
+    vec_data = train_data.copy()
+    vectorizer = CountVectorizer()
+    vectorized_train_data = vectorizer.fit_transform(vec_data['text'])
+
+
+    encoded_labels = label_encoder.fit_transform(train_labels)
+    train_labels_clean = encoded_labels.copy()
+
+    label_issues_info = CleanLearning(clf=LogisticRegression()).find_label_issues(vectorized_train_data, encoded_labels)
+
+    for idx, row in label_issues_info.iterrows():
+        if row["is_label_issue"]:
+            train_labels_clean[idx] = row["predicted_label"]
+
+    train_labels_clean_str = label_encoder.inverse_transform(train_labels_clean)
+
+    return train_labels_clean_str
