@@ -31,13 +31,15 @@ Group5 project for data preparation
 <center class="half">
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="450" height="200", alt= "Before modification">
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8382f130-93fd-4326-931a-bd2a4e3af27b" width="450" height="200">
-   <p>Before&nbsp;Modification&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After&nbsp;Modification</p>
+   <p>Before&nbsp;Modification&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After&nbsp;Modification</p>
 </center>
 </center>
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/e6ce9689-1c1c-40d4-b8d0-af922c4f2586" width="400" height="200">
    <p>After cleaned</p>
 </div>
+   After using clean_bc_label_error function to detect the error, we will get the confidence of every errors. According to this, we can correct it. The result is below:
+   ![image](https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/f5706c61-cf22-4bdc-81c1-970e1af3b196)
 
 
 
