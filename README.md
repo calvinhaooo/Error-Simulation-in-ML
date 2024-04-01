@@ -26,10 +26,21 @@ Group5 project for data preparation
 2. duplicate: 
 3. missing: 
 4. label error:
-   For label errors, we can use def modify_labels_to_negative(labels, percentage) in error_genertor.py to simulate these errors. The experiment is based on IMDb dataset, we wanna see how label errors can influence the ML pipeline training. The parameter percentage we set is 25 and 50, we gonna change 25% or 50% negative labels into positive to simulate these error
-<img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="300" height="200">
-<img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/3b567f49-ec8f-4457-a1cd-2a45c6b8f5aa" width="300" height="200">
-<img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/87abc330-42ed-4523-8f1d-c10eb9691bd7" width="300" height="200">
+   For label errors, we can use def modify_labels_to_negative(labels, percentage) in error_genertor.py to simulate these errors. The experiment is based on IMDb dataset, we wanna see how label errors can influence the ML pipeline training. The parameter percentage we set is 25 and 50, we gonna change 25% or 50% negative labels into positive to simulate these error. 
+   <figure>
+      <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="300" height="200">
+      <figcaption>Before modification</figcaption>
+   </figure>
+   <figure>
+      <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/3b567f49-ec8f-4457-a1cd-2a45c6b8f5aa" width="300" height="200">
+      <figcaption>After modification</figcaption>
+   </figure>
+   <figure>
+      <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/87abc330-42ed-4523-8f1d-c10eb9691bd7" width="300" height="200">
+      <figcaption>After clean</figcaption>
+   </figure>
+
+
 
 
 
