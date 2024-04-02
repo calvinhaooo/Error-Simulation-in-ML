@@ -6,6 +6,7 @@ from util.data_preprocessor import *
 from util.error_generator import *
 from util.data_cleaner import *
 
+
 def define_training_pipeline(numerical_columns, categorical_columns) -> Pipeline:
     print("Setting up training pipeline")
     feature_transformation = ColumnTransformer(transformers=[
@@ -58,6 +59,7 @@ def evaluate(y_scores, y_pred, y_true):
     print(conf_matrix)
     return accuracy
 
+
 def evaluatePredict(y_pred, y_true):
     mse = mean_squared_error(y_true, y_pred)
     print("MSE:", mse)
@@ -65,6 +67,7 @@ def evaluatePredict(y_pred, y_true):
     print("RMSE:", rmse)
     r2 = r2_score(y_true, y_pred)
     print("R² Score:", r2)
+
 
 if __name__ == '__main__':
     mc_data = read_data(file_name='housing_price_dataset.csv')
@@ -100,7 +103,7 @@ if __name__ == '__main__':
 
     dirty_data = train_data.copy()
 
-    add_outliers_random_rows(dirty_data, num_rows= 4000, numeric_columns=numerics, factor=10)
+    add_outliers_random_rows(dirty_data, num_rows=4000, numeric_columns=numerics, factor=10)
     clean_data = dirty_data.copy()
     clean_data = remove_outliers_iqr(clean_data, numerics)
     detect_impute_knn(clean_data)

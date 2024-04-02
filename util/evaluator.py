@@ -1,4 +1,5 @@
 from sklearn.compose import ColumnTransformer
+from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import *
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score, \
     mean_squared_error, r2_score
@@ -16,7 +17,7 @@ def define_training_pipeline(numerical_columns, categorical_columns, classifier)
 
     pipeline = Pipeline([
         ('features', feature_transformation),
-        # ('reduction', TruncatedSVD(n_components=64)),
+        ('reduction', TruncatedSVD(n_components=64)),
         ('classifier', classifier)
         # ('classifier', SGDClassifier(loss='log_loss', penalty='l2', max_iter=500))
         # ('classifier', SGDClassifier(loss='log_loss', random_state=42))

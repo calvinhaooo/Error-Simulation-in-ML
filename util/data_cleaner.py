@@ -76,15 +76,6 @@ def correct_label_errors(data, label_name, features_columns):
     return data
 
 
-def remove_duplication(df, method='simple'):
-    new_df = df.copy()
-    if method == 'simple':
-        new_df = new_df.drop_duplicates()
-    elif method == 'similarity':
-        pass
-        # todo
-    return new_df
-
 
 def cluster_labels(df, label):
     features = df['text']
