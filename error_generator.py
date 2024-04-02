@@ -1,5 +1,4 @@
 import random
-import string
 
 import numpy as np
 import pandas as pd
@@ -20,22 +19,6 @@ def duplicates_data(data: DataFrame, percentage=3):
     random_rows = DataFrame(random_rows)
     new_data = pd.concat([data, random_rows])
     return new_data
-
-
-def add_noise_to_text(df: DataFrame, percentage=10, noise_percentage=10):
-    num_outliers = int(len(df) * percentage / 100)
-    indices = np.random.choice(df.index, num_outliers, replace=False)
-    characters = string.punctuation + string.digits
-    for i in indices:
-        text = df.loc[i, 'text']
-        num_noise_chars = int(len(text) * noise_percentage / 100)
-
-        for _ in range(num_noise_chars):
-            index = random.randint(0, len(text) - 1)
-            noise_char = random.choice(characters)
-            text = text[:index] + noise_char + text[index:]
-
-        df.loc[i, 'text'] = text
 
 
 def add_null_noise(df, label_column, null_percentage=5):
@@ -92,19 +75,33 @@ def alert_label(data: DataFrame, label_name: str, percentage=5, indices=None):
 
 
 def generate_multivariate_outliers(df: DataFrame, numerical_columns, categorical_columns, percentage=5, factors=None):
+    """
+    This function is to generate multivariate outliers in a DataFrame.
+    :param df: This is the DataFrame in which the outliers will be generated.
+    :param numerical_columns: List of numerical columns in the DataFrame.
+    :param categorical_columns: List of categorical columns in the DataFrame.
+    :param percentage: The percentage of outliers to generate. Default is 5%.
+    :param factors: A list of factors to scale the outliers. Default is [0.5].
+    :return: A DataFrame of multivariate outliers.
+    """
+    # If factors is not provided, set it to default value [0.5]
     if factors is None:
         factors = [0.5]
+    # Randomly select indices from the DataFrame according to the percentage
     num_outliers = int(len(df) * percentage / 100)
     outlier_indices = np.random.choice(df.index, num_outliers, replace=False)
     outliers = df.loc[outlier_indices].copy()
+    # Scale the numerical columns of the outliers using the random scaling matrix
     random_matrix = np.random.choice(factors, size=outliers[numerical_columns].shape)
     outliers[numerical_columns] *= random_matrix
-
+    # For each categorical column, alert the value randomly
     for column in categorical_columns:
         df = alert_label(df, column, indices=outlier_indices)
+    # Set a dummy 'text' column to the outliers DataFrame
     outliers['text'] = 'text'
-    return outliers, outlier_indices
-    
+    return outliers
+
+
 def modify_labels_to_negative(labels, percentage=25):
     """
     Modify a percentage of labels to negative.
@@ -122,4 +119,3 @@ def modify_labels_to_negative(labels, percentage=25):
     labels_modified = labels.copy()
     labels_modified.loc[indices_to_change] = 'negative'
     return labels_modified
-
