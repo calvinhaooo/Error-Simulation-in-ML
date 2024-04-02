@@ -44,7 +44,7 @@ def run_pipeline(train_set, test_set, numerical_columns, categorical_columns, ta
         pred = model.predict(test_x)
         # prob = model.predict_proba(test_x)[:, 1]
         prob = model.predict_proba(test_x)
-        evaluate(y_scores=prob, y_pred=pred, y_true=test_y)
+        evaluate_classifier(y_scores=prob, y_pred=pred, y_true=test_y)
     elif task_type == 'regression':
         pred = model.predict(test_x)
         evaluatePredict(y_pred=pred, y_true=test_y)
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     add_outliers_random_rows(dirty_data, num_rows= 4000, numeric_columns=numerics, factor=10)
     clean_data = dirty_data.copy()
     clean_data = remove_outliers_iqr(clean_data, numerics)
-    detectN_impute_KNN(clean_data)
+    detect_impute_knn(clean_data)
 
     run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories, task_type)
     run_pipeline((dirty_data, train_labels), (test_data, test_labels), numerics, categories, task_type)
