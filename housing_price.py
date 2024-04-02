@@ -1,18 +1,10 @@
-from sklearn.compose import ColumnTransformer
-from sklearn.feature_extraction.text import *
-from sklearn.linear_model import LogisticRegression, LinearRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score, \
-    mean_squared_error, r2_score
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import BernoulliNB
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.tree import DecisionTreeClassifier
 
-from evaluator import *
-from data_preprocessor import *
-from error_generator import *
-from data_cleaner import *
+from util.evaluator import *
+from util.data_preprocessor import *
+from util.error_generator import *
+from util.data_cleaner import *
 
 def define_training_pipeline(numerical_columns, categorical_columns) -> Pipeline:
     print("Setting up training pipeline")

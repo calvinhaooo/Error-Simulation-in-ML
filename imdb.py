@@ -1,10 +1,10 @@
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import BernoulliNB
 
-from data_cleaner import *
-from data_preprocessor import *
-from error_generator import *
-from evaluator import *
+from util.data_cleaner import *
+from util.data_preprocessor import *
+from util.error_generator import *
+from util.evaluator import *
 
 
 def plot_label_distribution(labels, title):

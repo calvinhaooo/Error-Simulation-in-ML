@@ -5,10 +5,10 @@ from sklearn.exceptions import DataConversionWarning
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import train_test_split
 
-from data_cleaner import *
-from data_preprocessor import *
-from error_generator import *
-from evaluator import *
+from util.data_cleaner import *
+from util.data_preprocessor import *
+from util.error_generator import *
+from util.evaluator import *
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore", category=DataConversionWarning)
