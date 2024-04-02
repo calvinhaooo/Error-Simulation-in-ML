@@ -9,6 +9,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
 
+from evaluator import *
 from data_preprocessor import *
 from error_generator import *
 from data_cleaner import *
