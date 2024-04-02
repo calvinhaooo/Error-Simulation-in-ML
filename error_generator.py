@@ -62,7 +62,13 @@ def add_univariate_outliers(df, numerical_columns, categorical_columns, outlier_
     df.loc[outlier_indices, numerical_columns] *= factor
     for column in categorical_columns:
         df = alert_label(df, column, indices=outlier_indices)
-
+        
+def add_outliers_random_rows(df, num_rows, numeric_columns, factor):
+    rows_indices = np.random.choice(df.index, num_rows, replace=False)
+    for row_index in rows_indices:
+        for column in numeric_columns:
+            outlier = np.random.normal(np.mean(df[column]) * factor, np.std(df[column]) * factor)
+            df.loc[row_index, column] += outlier
 
 def alert_label(data: DataFrame, label_name: str, percentage=5, indices=None):
     new_data = data.copy()
