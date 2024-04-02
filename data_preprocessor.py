@@ -85,7 +85,7 @@ def convert_height_to_number(height_in_inch):
         inch = int(words[1][0])
     else:
         inch = 0
-    return ft*12+inch
+    return ft * 12 + inch
 
 
 def parse_date(df, column_name, date=True, time=False, weekday=False):

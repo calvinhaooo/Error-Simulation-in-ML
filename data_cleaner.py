@@ -1,26 +1,18 @@
-import re
-
 import numpy as np
 import pandas as pd
+from cleanlab.classification import CleanLearning
 from matplotlib import pyplot as plt
 from scipy import signal
 from sklearn.decomposition import TruncatedSVD
 from sklearn.ensemble import IsolationForest
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.impute import KNNImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import LabelEncoder
-from cleanlab.classification import CleanLearning
-from scipy import signal
-
-def textprocess(df, column):
-    pattern = r'[^a-zA-Z0-9\s]+'
-    df[column] = df[column].apply(lambda x: re.sub(pattern, '', x).strip())
 
 
-# ??
 def remove_outliers_iqr(df, column):
     Q1 = df[column].quantile(0.25)
     Q3 = df[column].quantile(0.75)
@@ -31,7 +23,6 @@ def remove_outliers_iqr(df, column):
     print("Identified outliers count: ", len(outliers))
     df[column] = np.where((df[column] < lower_bound) | (df[column] > upper_bound), np.nan, df[column])
     return df
-    # df.drop(df[(df[column] < lower_bound) | (df[column] > upper_bound)].index, inplace=True)
 
 
 def detect_impute_knn(df):
@@ -52,20 +43,6 @@ def detect_impute_knn(df):
 
 def remove_noise(df, column, kernel_size=3):
     df[column] = signal.medfilt(df[column].values, kernel_size=kernel_size)
-
-
-def detect_duplicates(df):
-    """
-    Detect duplicate rows in a DataFrame.
-
-    Parameters:
-        df (pandas.DataFrame): The DataFrame to check for duplicates.
-
-    Returns:
-        pandas.DataFrame: DataFrame containing duplicate rows.
-    """
-    duplicate_rows = df[df.duplicated()]
-    return duplicate_rows
 
 
 def correct_label_errors(data, label_name, features_columns):
@@ -180,14 +157,13 @@ def detect_multivariate_outliers(transformed_data, n=6, percentile=1, visualizat
     outlier_pos = np.where(scores < threshold)
 
     return outlier_pos[0]
-    
-def clean_bc_label_error(train_data, train_labels):
 
+
+def clean_bc_label_error(train_data, train_labels):
     label_encoder = LabelEncoder()
     vec_data = train_data.copy()
     vectorizer = CountVectorizer()
     vectorized_train_data = vectorizer.fit_transform(vec_data['text'])
-
 
     encoded_labels = label_encoder.fit_transform(train_labels)
     train_labels_clean = encoded_labels.copy()
