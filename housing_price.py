@@ -24,17 +24,7 @@ def define_training_pipeline(numerical_columns, categorical_columns) -> Pipeline
 
     pipeline = Pipeline([
         ('features', feature_transformation),
-        # ('classifier', SGDClassifier(loss='log_loss', penalty='l2', max_iter=1000, random_state=seed))
-        # ('classifier', LogisticRegression(multi_class='multinomial', max_iter=100))
-        # ('classifier', KNeighborsClassifier())
-        # ('classifier', KNeighborsClassifier())  # slow
-        # ('classifier', DecisionTreeClassifier(max_depth=50, random_state=40))
         ('classifier', LinearRegression())
-        # ('classifier', MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500)) # slow
-        # ('classifier', BernoulliNB())
-        # ('classifier', DecisionTreeClassifier()) # slow
-        # ('classifier', SVC())  # slow
-        # ('classifier', AdaBoostClassifier()) # slow
     ])
 
     return pipeline
@@ -116,26 +106,11 @@ if __name__ == '__main__':
         clean_data, labels, test_size=test_size, random_state=seed)
 
     dirty_data = train_data.copy()
-    # add_outliers(dirty_data, column='SquareFeet', outlier_percentage=20, factor= 5)
+
     add_outliers_random_rows(dirty_data, num_rows= 4000, numeric_columns=numerics, factor=10)
-    # add_noise_to_text(dirty_data, percentage= 50, noise_percentage= 30)
-    # print(dirty_data['text'])
     clean_data = dirty_data.copy()
     clean_data = remove_outliers_iqr(clean_data, numerics)
     detectN_impute_KNN(clean_data)
-    # clean_data_2 = detectN_impute_KNN(clean_data, numerics)
-    # A 变成拉丁
-    # dirty_data = add_broken_characters(dirty_data, column='text', fraction=0.5)
-    # print(dirty_data.columns)
-
-    # label error
-    # dirty_train_label = train_labels.copy()
-    # dirty_test_label = test_labels.copy()
-    # random_replace_labels(dirty_train_label, dirty_test_label, num_labels= 3)
-    # print(dirty_label.unique())
-
-    # 加入噪声影响不大
-    # dirty_data = add_gaussian_noise(dirty_data, column='SquareFeet', fraction=0.5)
 
     run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories, task_type)
     run_pipeline((dirty_data, train_labels), (test_data, test_labels), numerics, categories, task_type)
