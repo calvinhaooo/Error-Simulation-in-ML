@@ -16,12 +16,12 @@ We aim to build an ML pipeline with the necessary preprocessing and cleaning ope
    <p>The workflow of our project</p>
    </div>
 ## The dataset we used
-* Amazon product review: The dataset demonstrates the product details of amazon website including the reviews of product from customer with 1,292,954 rows and 12 columns.
-* Molcloth dataset: About Clothing fit with 82,790 rows and 15 columns
-* RentRunAway: About Clothing fit data with 192,544 rorws and 15 columns
-* IMDb dataset: About IMDb movie review with 50,000 rows and 2 columns.
-* Housing price dataset: Used for regression task for predicting the housing price with 50,000 rows and 6 columns
-* SunSpot dataset: a kind of time series dataset with 3265 rows and 2 columns.
+* **Amazon product review**: The dataset demonstrates the product details of amazon website including the reviews of product from customer with 1,292,954 rows and 12 columns.
+* **Molcloth dataset**: About Clothing fit with 82,790 rows and 15 columns
+* **RentRunAway**: About Clothing fit data with 192,544 rorws and 15 columns
+* **IMDb dataset**: About IMDb movie review with 50,000 rows and 2 columns.
+* **Housing price dataset**: Used for regression task for predicting the housing price with 50,000 rows and 6 columns
+* **SunSpot dataset**: a kind of time series dataset with 3265 rows and 2 columns.
 
 ## Processing
 
