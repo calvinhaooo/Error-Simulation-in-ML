@@ -10,7 +10,8 @@ We aim to build an ML pipeline with the necessary preprocessing and cleaning ope
 *  Apply preprocessing and data cleaning
 *  Introduce errors into the datasets
 *  Adapt preprocessing and cleaning operations
-*  Merge sub-groups, compare results, refine successful adaptations 
+*  Merge sub-groups, compare results, refine successful adaptations
+Below is our general workflow of our project.
    <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/04545085-97d0-4b3c-acd4-5c8691534c94">
    <p>The workflow of our project</p>
@@ -70,7 +71,7 @@ Then, we have tried 3 unsupervised methods for detecting and cleaning up labels.
 * nltk VADER
 * LatentDirichletAllocation (LDA)
 * KMeans clustering
-After done the experiment of these methods in the `reviews_analyzer.ipynb`, we can get the result as shown in the below table:
+After done the experiment of these methods in the `reviews_analyzer.ipynb`, we can get the result as shown in the below table. In addition, the cleaning label we get is stored in the `predicted_reviews.csv`.
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/133a11ac-fd7d-4e0c-945b-b685511cb3bc" width="800" height="150">
    <p>Unsupervised methods for label errors</p>
