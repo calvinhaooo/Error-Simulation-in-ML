@@ -76,7 +76,6 @@ def correct_label_errors(data, label_name, features_columns):
     return data
 
 
-
 def cluster_labels(df, label):
     features = df['text']
     labels = df[label]

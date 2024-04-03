@@ -31,11 +31,10 @@ def add_null_noise(df, label_column, null_percentage=5):
         df.at[index, col] = np.nan
 
 
-def random_replace_column(df, column, num_labels):
+def random_replace_column(df, column, num_errors):
     print(df[column].dtype)
     if df[column].dtype == 'object':
-        # num_labels = int(len(df) * outlier_percentage / 100)
-        label_indices = np.random.choice(df.index, num_labels, replace=False)
+        label_indices = np.random.choice(df.index, num_errors, replace=False)
         for index in label_indices:
             label = df.at[index, column]
             char_list = list(label)
@@ -48,8 +47,8 @@ def random_replace_column(df, column, num_labels):
 
             df.at[index, column] = result_str
     else:
-        label_indices = np.random.choice(df.index, num_labels, replace=False)
-        outliers = np.random.normal(np.mean(df[column]) * 2, np.std(df[column]) * 3, num_labels)
+        label_indices = np.random.choice(df.index, num_errors, replace=False)
+        outliers = np.random.normal(np.mean(df[column]) * 2, np.std(df[column]) * 3, num_errors)
         df.loc[label_indices, column] += outliers
 
 
