@@ -61,6 +61,8 @@ We chose dataset `renttherunway_final_data` as our classification dataset.
    After using `clean_bc_label_error` function to detect the error, we will get the confidence of every error. According to this, we can correct it. The result is below:
    <p>&nbsp;</p>
    <div align=center>
-   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/f5706c61-cf22-4bdc-81c1-970e1af3b196" width="800" height="200">
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8ece9d8a-639e-4ff3-9c38-44d336d9209d" width="800" height="200">
    <p>The result of labels error in ML pipeline training</p>
    </div>
+
+
