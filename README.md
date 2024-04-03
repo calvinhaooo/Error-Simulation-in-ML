@@ -2,7 +2,7 @@
 Group5 project for data preparation
 ## The introduction of oue project
 ### Goal: 
-create “bad” instances of data, which will help in evaluating the robustness of our model against realistic data issues. Create, test and evaluate models for robustness.
+create “bad” instances of data, which will help in evaluating the robustness of our model against realistic data issues. Build,test and evaluate different models for robustness.
 ### Details: 
 We aim to build an ML pipeline with the necessary preprocessing and cleaning operations, as well as various functions to inject non-malicious errors into the data. These errors will expose the weakness as well as help increase the robustness of the model.  
 ## The general process of our project 
@@ -32,13 +32,14 @@ We use `error_generator.py` to simulate various error types including:
 2. outlier
 3. noise
 4. label error
+5. spelling error
 
 
 ## Data Clean
 
 ## Experiments
 * regression
-For the regression task, the dataset we chose is `housing_price_dataset`. 
+For the regression task, the dataset we chose is `housing_price_dataset` and the time series data. 
 
 * classification
 We chose dataset `renttherunway_final_data` as our classification dataset.
