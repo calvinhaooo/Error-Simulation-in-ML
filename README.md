@@ -66,4 +66,17 @@ We chose dataset `renttherunway_final_data` as our classification dataset.
    <p>The result of labels error in ML pipeline training</p>
    </div>
 
+Then, we have tried 3 unsupervised methods for detecting and cleaning up labels. The unsupervised methods we used are:
+* nltk VADER
+* LatentDirichletAllocation (LDA)
+* KMeans clustering
+After done the experiment of these methods in the `reviews_analyzer.ipynb`, we can get the result as shown in the below table:
+<div align=center>
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/133a11ac-fd7d-4e0c-945b-b685511cb3bc" width="400" height="200">
+   <p>Unsupervised methods for label errors</p>
+</div>
+
+
+
+
 
