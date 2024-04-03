@@ -71,7 +71,7 @@ Then, we have tried 3 unsupervised methods for detecting and cleaning up labels.
 * nltk VADER
 * LatentDirichletAllocation (LDA)
 * KMeans clustering
-After done the experiment of these methods in the `reviews_analyzer.ipynb`, we can get the result as shown in the below table. In addition, the cleaning label we get is stored in the `predicted_reviews.csv`.
+After done the experiment of these methods in the `reviews_analyzer.ipynb`. After running this, the cleaning label we get is stored in the `predicted_reviews.csv`. Then we can use the label we cleaned for the machine learning pipeline, and we get the result as the table shown below:
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/133a11ac-fd7d-4e0c-945b-b685511cb3bc" width="800" height="150">
    <p>Unsupervised methods for label errors</p>
