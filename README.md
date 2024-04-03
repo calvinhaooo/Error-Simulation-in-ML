@@ -62,7 +62,7 @@ We chose dataset `renttherunway_final_data` as our classification dataset.
    After using `clean_bc_label_error` function to detect the error, we will get the confidence of every error. According to this, we can correct it. The result is below:
    <p>&nbsp;</p>
    <div align=center>
-   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8ece9d8a-639e-4ff3-9c38-44d336d9209d" width="800" height="200">
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/8ece9d8a-639e-4ff3-9c38-44d336d9209d" width="800" height="150">
    <p>The result of labels error in ML pipeline training</p>
    </div>
 
@@ -72,7 +72,7 @@ Then, we have tried 3 unsupervised methods for detecting and cleaning up labels.
 * KMeans clustering
 After done the experiment of these methods in the `reviews_analyzer.ipynb`, we can get the result as shown in the below table:
 <div align=center>
-   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/133a11ac-fd7d-4e0c-945b-b685511cb3bc" width="400" height="200">
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/133a11ac-fd7d-4e0c-945b-b685511cb3bc" width="800" height="150">
    <p>Unsupervised methods for label errors</p>
 </div>
 
