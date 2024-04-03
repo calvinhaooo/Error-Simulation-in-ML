@@ -1,43 +1,44 @@
 from sklearn.compose import ColumnTransformer
 from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import *
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, roc_auc_score, \
-    mean_squared_error, r2_score
+from sklearn.metrics import *
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 
-def define_training_pipeline(numerical_columns, categorical_columns, classifier) -> Pipeline:
+def define_training_pipeline(numerical_columns, categorical_columns, classifier, vectorizer=None,
+                             reduction=0) -> Pipeline:
+    if vectorizer is None:
+        vectorizer = TfidfVectorizer()
+
     print("Setting up training pipeline")
     feature_transformation = ColumnTransformer(transformers=[
         ('numerical_features', StandardScaler(), numerical_columns),
         ('categorical_features', OneHotEncoder(handle_unknown='ignore'), categorical_columns),
-        ('textual_features', CountVectorizer(), 'text'),
+        ('textual_features', vectorizer, 'text'),
     ], remainder="drop")
 
-    pipeline = Pipeline([
-        ('features', feature_transformation),
-        ('reduction', TruncatedSVD(n_components=64)),
-        ('classifier', classifier)
-        # ('classifier', SGDClassifier(loss='log_loss', penalty='l2', max_iter=500))
-        # ('classifier', SGDClassifier(loss='log_loss', random_state=42))
-        # ('classifier', LogisticRegression(multi_class='multinomial', max_iter=500))
-        # ('classifier', KNeighborsClassifier())  # slow
-        # ('classifier', MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=100))  # slow
-        # ('classifier', BernoulliNB())
-        # ('classifier', DecisionTreeClassifier())  # slow
-        # ('classifier', SVC())  # slow
-        # ('classifier', AdaBoostClassifier()) # slow
-    ])
+    if reduction == 0:
+        pipeline = Pipeline([
+            ('features', feature_transformation),
+            ('classifier', classifier)
+        ])
+    else:
+        pipeline = Pipeline([
+            ('features', feature_transformation),
+            ('reduction', TruncatedSVD(n_components=reduction)),
+            ('classifier', classifier)
+        ])
 
     return pipeline
 
 
-def run_pipeline(train_set, test_set, numerical_columns, categorical_columns, model, task_type):
+def run_pipeline(train_set, test_set, numerical_columns, categorical_columns, model, task_type, vectorizer=None,
+                 reduction=0):
     train_x, train_y = train_set
     test_x, test_y = test_set
     print("---------------------------------------")
-    sklearn_pipeline = define_training_pipeline(numerical_columns, categorical_columns, model)
+    sklearn_pipeline = define_training_pipeline(numerical_columns, categorical_columns, model, vectorizer, reduction)
     # train the model
     print("Start training pipeline")
     model = sklearn_pipeline.fit(train_x, train_y)

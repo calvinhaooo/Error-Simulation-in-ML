@@ -46,24 +46,28 @@ if __name__ == '__main__':
     labels = clean_data.pop(label_name)
     task = 'classification'
     model = SGDClassifier(loss='log_loss', random_state=seed)
+    # vectorizer = TfidfVectorizer()
+    vectorizer = CountVectorizer()
 
     train_data, test_data, train_labels, test_labels = train_test_split(
         clean_data, labels, test_size=test_size, random_state=seed)
 
     # run original train set
-    run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories, model, task)
+    run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories, model, task, vectorizer,
+                 reduction=64)
     # generate dirty dataset
     dirty_data = train_data.copy()
 
     # here to alert parameters!!!
     dirty_data[label_name] = train_labels
-    add_null_noise(dirty_data, label_name, null_percentage=5)
+    add_null_noise(dirty_data, label_name, null_percentage=20)
     cleaned_data = dirty_data.copy()
     # delete null data
     dirty_data = dirty_data.dropna()
     dirty_labels = dirty_data.pop(label_name)
 
-    run_pipeline((dirty_data, dirty_labels), (test_data, test_labels), numerics, categories, model, task)
+    run_pipeline((dirty_data, dirty_labels), (test_data, test_labels), numerics, categories, model, task, vectorizer,
+                 reduction=64)
 
     # clean the dirty data
     clean_start_time = time.time()
@@ -71,7 +75,8 @@ if __name__ == '__main__':
 
     clean_end_time = time.time()
 
-    run_pipeline((cleaned_data, train_labels), (test_data, test_labels), numerics, categories, model, task)
+    run_pipeline((cleaned_data, train_labels), (test_data, test_labels), numerics, categories, model, task, vectorizer,
+                 reduction=64)
     train_end_time = time.time()
     print(
         f'Cleaning data costs {clean_end_time - clean_start_time}s\n'

@@ -1,10 +1,10 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
-from util.evaluator import *
+from util.data_cleaner import *
 from util.data_preprocessor import *
 from util.error_generator import *
-from util.data_cleaner import *
+from util.evaluator import *
 
 
 def define_training_pipeline(numerical_columns, categorical_columns) -> Pipeline:

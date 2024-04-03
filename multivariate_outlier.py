@@ -51,7 +51,7 @@ if __name__ == '__main__':
         clean_data, labels, test_size=test_size, random_state=seed)
 
     # run original train set
-    run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories, model, task)
+    run_pipeline((train_data, train_labels), (test_data, test_labels), numerics, categories, model, task, reduction=64)
     # generate dirty dataset
     dirty_data = train_data.copy()
     feature_transformation = ColumnTransformer(transformers=[
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     dirty_data, transformed_data = merge_outliers(dirty_data, outliers, feature_transformation, visualization=True)
     dirty_labels = pd.concat([outlier_labels, train_labels])
 
-    run_pipeline((dirty_data, dirty_labels), (test_data, test_labels), numerics, categories, model, task)
+    run_pipeline((dirty_data, dirty_labels), (test_data, test_labels), numerics, categories, model, task, reduction=64)
 
     # clean the dirty data
     clean_start_time = time.time()
@@ -83,7 +83,8 @@ if __name__ == '__main__':
     cleaned_data = clean_data.drop(index=outlier_pos)
     cleaned_labels = clean_labels.drop(index=outlier_pos)
 
-    run_pipeline((cleaned_data, cleaned_labels), (test_data, test_labels), numerics, categories, model, task)
+    run_pipeline((cleaned_data, cleaned_labels), (test_data, test_labels), numerics, categories, model, task,
+                 reduction=64)
     train_end_time = time.time()
     print(
         f'Cleaning data costs {clean_end_time - clean_start_time}s\n'
