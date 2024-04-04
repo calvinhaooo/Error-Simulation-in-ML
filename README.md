@@ -44,10 +44,15 @@ For the regression task, the dataset we chose is `housing_price_dataset` and the
 
 * classification
 We chose dataset `renttherunway_final_data` as our classification dataset.
-1. univariate outlier:
-2. multivariate outlier: Function `generate_multivariate_outliers` can generate a set of multivariate outliers according to a given dataframe. We focus on two key parameters, 'percentage' and 'factors', and test their influence to model by changing their values. Next, function `merge_outliers` can merge outliers and original dataset and provides a visualization after dimensionality reduction.
-3. missing: You can run 
-4. label error:
+1. univariate outlier: Function `add_univariate_outliers` in `error_generator.py` can generate univariate outlier according to a given data frame. We focus on two key parameters: `outlier_percentage` and `factor`. The first one is how many outliers u wanna inject into the dataset, the second one is to control how many times do you zoom in and out. Then, after injecting these errors, we can use the IQR method, the data is divided into quartiles and data points outside the range $[Q1-1.5\times IQR, Q3+1.5\times IQR]$ are labeled as outliers, where $IQR=Q3-Q1$. This function is in `data_cleaner.py` named `remove_outliers_iqr`. After running this, we can successfully detect and clean up most of these errors. The result as below shows:
+2. <div align=center>
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/1a3715bf-74c4-45f2-b230-362eca432904" width="800" height="150">
+   <p>The result of univariate errors</p>
+</div>
+
+3. multivariate outlier: Function `generate_multivariate_outliers` can generate a set of multivariate outliers according to a given dataframe. We focus on two key parameters, 'percentage' and 'factors', and test their influence to model by changing their values. Next, function `merge_outliers` can merge outliers and original dataset and provides a visualization after dimensionality reduction.
+4. missing: You can run 
+5. label error:
    For label errors, we can use `modify_labels_to_negative(labels, percentage)` in `error_genertor.py` to simulate these errors. The experiment is based on IMDb dataset, we wanna see how label errors can influence the ML pipeline training. The parameter percentage we set is 25 and 50, we gonna change 25% or 50% negative labels into positive to simulate these error. Then, we can use `clean_bc_label_error(train_data, train_labels)` to detect these errors in `data_cleaner.py`. Then we can get the data is pruned, and substitute it as the correct label. Below is the bar charts of simulating label errors and cleaning it. The left bar is the number of positive, the other one is Negative.
 
 <center class="half">
