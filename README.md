@@ -13,9 +13,11 @@ We aim to build an ML pipeline with the necessary preprocessing and cleaning ope
 *  Merge sub-groups, compare results, refine successful adaptations
 Below is our general workflow of our project.
    <div align=center>
-   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/04545085-97d0-4b3c-acd4-5c8691534c94">
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/5259a934-00c1-45d1-b940-b90e332d18f1">
    <p>The workflow of our project</p>
    </div>
+
+
 ## The dataset we used
 * **Amazon product review**: The dataset demonstrates the product details of amazon website including the reviews of product from customer with 1,292,954 rows and 12 columns.
 * **Molcloth dataset**: About Clothing fit with 82,790 rows and 15 columns
