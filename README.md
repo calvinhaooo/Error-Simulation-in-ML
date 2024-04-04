@@ -104,7 +104,6 @@ In terms of spelling error, the function `random_replace_column` in the `error_g
 </div>
 
 6. noise
-
 Simulate noise that occurs in time-series data, because of the natural characteristics of time-series, we can remove the noise  using filtering techniques.
 ![image](https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145342600/4e7e5a92-e6a2-4a1b-819b-49acfd843fb1)
 
