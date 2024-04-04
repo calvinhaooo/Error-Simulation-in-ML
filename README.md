@@ -48,13 +48,13 @@ For the regression task, the dataset we chose is `housing_price_dataset` and the
 We chose dataset `renttherunway_final_data` as our classification dataset.
 1. univariate outlier: Function `add_univariate_outliers` in `error_generator.py` can generate univariate outlier according to a given data frame. We focus on two key parameters: `outlier_percentage` and `factor`. The first one is how many outliers u wanna inject into the dataset, the second one is to control how many times do you zoom in and out. Then, after injecting these errors, we can use the IQR method, the data is divided into quartiles and data points outside the range $[Q1-1.5\times IQR, Q3+1.5\times IQR]$ are labeled as outliers, where $IQR=Q3-Q1$. This function is in `data_cleaner.py` named `remove_outliers_iqr`. After running this, we can successfully detect and clean up most of these errors. The result as below shows:
 <div align=center>
-   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/1a3715bf-74c4-45f2-b230-362eca432904" width="800" height="150">
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/1a3715bf-74c4-45f2-b230-362eca432904" width="600" height="150">
    <p>The result of univariate errors</p>
 </div>
 
 2. multivariate outlier: Function `generate_multivariate_outliers` can generate a set of multivariate outliers according to a given dataframe. We focus on two key parameters, 'percentage' and 'factors', and test their influence to model by changing their values. Next, function `merge_outliers` can merge outliers and original dataset and provides a visualization after dimensionality reduction.
 <div align=center>
-   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/ed14183a-f72c-428f-ac7c-5531bc58f933" width="600" height="150">
+   <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/ed14183a-f72c-428f-ac7c-5531bc58f933" width="700" height="150">
    <p>The result of multivariate errors</p>
 </div>
 
