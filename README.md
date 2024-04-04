@@ -41,6 +41,7 @@ We use `error_generator.py` to simulate various error types including:
 ## Data Clean
 
 ## Experiments
+We tried several models to assess the impact of errors on different models and selected the one that best suited our needs. For instance, complex models like RandomForest are sometimes less affected by certain types of errors and may maintain good performance despite them. 
 * regression
 For the regression task, the dataset we chose is `housing_price_dataset` and the time series data. 
 
