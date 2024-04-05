@@ -1,8 +1,8 @@
 # Error-Simulation-in-ML
 Group5 project for data preparation
-## The introduction of oue project
+## The introduction of our project
 ### Goal: 
-create “bad” instances of data, which will help in evaluating the robustness of our model against realistic data issues. Build,test and evaluate different models for robustness.
+Create “bad” instances of data, which will help in evaluating the robustness of our model against realistic data issues. Build, test and evaluate different models for robustness.
 ### Details: 
 We aim to build an ML pipeline with the necessary preprocessing and cleaning operations, as well as various functions to inject non-malicious errors into the data. These errors will expose the weakness as well as help increase the robustness of the model.  
 ## The general process of our project 
@@ -11,7 +11,7 @@ We aim to build an ML pipeline with the necessary preprocessing and cleaning ope
 *  Introduce errors into the datasets
 *  Adapt preprocessing and cleaning operations
 *  Merge sub-groups, compare results, refine successful adaptations
-Below is our general workflow of our project.
+Below is the general workflow of our project.
    <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/5259a934-00c1-45d1-b940-b90e332d18f1">
    <p>The workflow of our project</p>
@@ -19,7 +19,7 @@ Below is our general workflow of our project.
 
 
 ## The dataset we used
-* **Amazon product review**: The dataset demonstrates the product details of amazon website including the reviews of product from customer with 1,292,954 rows and 12 columns.
+* **Amazon product review**: The dataset demonstrates the product details of the Amazon website including the reviews of products from customers with 1,292,954 rows and 12 columns.
 * **Molcloth dataset**: About Clothing fit with 82,790 rows and 15 columns
 * **RentRunAway**: About Clothing fit data with 192,544 rows and 15 columns. Click [here](https://datarepo.eng.ucsd.edu/mcauley_group/data/renttherunway/renttherunway_final_data.json.gz) to download the dataset.
 * **IMDb dataset**: About IMDb movie review with 50,000 rows and 2 columns. Click [here](https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews) to download the dataset.
@@ -37,8 +37,10 @@ We use `error_generator.py` to simulate various error types including:
 4. label error
 5. spelling error
 
+## Handling reviews text for binary classification
+We insert the desired dataset and column in the 'review_analyzer.ipynb' file (by default, it uses the "review_text" column from the Modcloth dataset), and then run the whole program. This creates the "predicted_reviews.csv" file, a dataset with columns for the original index in the dataset (as NaN-values are removed and shifts indexes), the original text (by default "review_text") in case the merging process should be done by text and not index, and one column for each of the model outputs (K-means, VADER, LDA). This file in turn can be used for the relevant dataset experimentations.
 
-## Data Clean
+## Data Cleaning
 
 ## Experiments
 We tried several models to assess the impact of errors on different models and selected the one that best suited our needs. For instance, complex models like RandomForest are sometimes less affected by certain types of errors and may maintain good performance despite them. Besides, we also eliminate insignificant variables because they may introduce noise and slow down the pipeline.
@@ -46,28 +48,28 @@ We tried several models to assess the impact of errors on different models and s
 For the regression task, the dataset we chose is `housing_price_dataset` and the time series data. 
 
 * classification
-We chose dataset `renttherunway_final_data` as our classification dataset.
+We chose the dataset `renttherunway_final_data` as our classification dataset.
 ### Result 
-1. **univariate outlier**: Function `add_univariate_outliers` in `error_generator.py` can generate univariate outlier according to a given data frame. We focus on two key parameters: `outlier_percentage` and `factor`. The first one is how many outliers u wanna inject into the dataset, the second one is to control how many times do you zoom in and out. Then, after injecting these errors, we can use the IQR method, the data is divided into quartiles and data points outside the range $[Q1-1.5\times IQR, Q3+1.5\times IQR]$ are labeled as outliers, where $IQR=Q3-Q1$. This function is in `data_cleaner.py` named `remove_outliers_iqr`. After running this, we can successfully detect and clean up most of these errors. The result as below shows:
+1. **univariate outlier**: Function `add_univariate_outliers` in `error_generator.py` can generate univariate outlier according to a given data frame. We focus on two key parameters: `outlier_percentage` and `factor`. The first one is how many outliers u wanna inject into the dataset, the second one is to control how many times you zoom in and out. Then, after injecting these errors, we can use the IQR method, the data is divided into quartiles, and data points outside the range $[Q1-1.5\times IQR, Q3+1.5\times IQR]$ are labeled as outliers, where $IQR=Q3-Q1$. This function is in `data_cleaner.py` named `remove_outliers_iqr`. After running this, we can successfully detect and clean up most of these errors. The result below shows:
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/1a3715bf-74c4-45f2-b230-362eca432904" width="600" height="150">
    <p>The result of univariate errors</p>
 </div>
 
-2. **multivariate outlier**: Function `generate_multivariate_outliers` can generate a set of multivariate outliers according to a given dataframe. We focus on two key parameters, 'percentage' and 'factors', and test their influence to model by changing their values. Next, function `merge_outliers` can merge outliers and original dataset and provides a visualization after dimensionality reduction.
+2. **multivariate outlier**: The function `generate_multivariate_outliers` can generate a set of multivariate outliers according to a given data frame. We focus on two key parameters, 'percentage' and 'factors', and test their influence to the model by changing their values. Next, the function `merge_outliers` can merge outliers and the original dataset and provide a visualization after dimensionality reduction.
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/ed14183a-f72c-428f-ac7c-5531bc58f933" width="700" height="150">
    <p>The result of multivariate errors</p>
 </div>
 
-3. **missing value**: You can run function `add_null_noise` in the `error_generator.py`. The only parameter we focus on is the null_percentage. We can set different percentage to research how it affects the pipleline training. We choose 2 methods to clean the null noise: the first one is to throw it away, and the other is use KNN to impute these errors. In addition, we also change different vectorize in the pipeline.
+3. **missing value**: You can run function `add_null_noise` in the `error_generator.py`. The only parameter we focus on is the null_percentage. We can set different percentages to research how it affects pipeline training. We choose 2 methods to clean the null noise: the first one is to throw it away, and the other is use KNN to impute these errors. In addition, we also change different vectorize in the pipeline.
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/4c6a01f7-0136-4e6a-8a24-a08484ce12c2" width="600" height="150">
    <p>The result of missing value errors</p>
 </div>
 
 4. **Label error**:
-   For label errors, we can use `modify_labels_to_negative(labels, percentage)` in `error_genertor.py` to simulate these errors. The experiment is based on IMDb dataset, we wanna see how label errors can influence the ML pipeline training. The parameter percentage we set is 25 and 50, we gonna change 25% or 50% negative labels into positive to simulate these error. Then, we can use `clean_bc_label_error(train_data, train_labels)` to detect these errors in `data_cleaner.py`. Then we can get the data is pruned, and substitute it as the correct label. Below is the bar charts of simulating label errors and cleaning it. The left bar is the number of positive, the other one is Negative.
+   For label errors, we can use `modify_labels_to_negative(labels, percentage)` in `error_genertor.py` to simulate these errors. The experiment is based on the IMDb dataset, we wanna see how label errors can influence the ML pipeline training. The parameter percentages we set are 25 and 50, changing 25% or 50% of negative labels into positives to simulate these errors. Then, we can use `clean_bc_label_error(train_data, train_labels)` to detect these errors in `data_cleaner.py`. Then we can get the data pruned, and substitute it as the correct label. Below are the bar charts for simulating label errors and cleaning them. The left bar is the number of positives, the other one is Negative.
 
 <center class="half">
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/def394a3-b256-4994-8a13-f28ca7031341" width="400" height="200", alt= "Before modification">
@@ -90,14 +92,14 @@ Then, we have tried 3 unsupervised methods for detecting and cleaning up labels.
 * nltk VADER
 * LatentDirichletAllocation (LDA)
 * KMeans clustering
-After done the experiment of these methods in the `reviews_analyzer.ipynb`. After running this, the cleaning label we get is stored in the `predicted_reviews.csv`. Then we can use the label we cleaned for the machine learning pipeline, and we get the result as the table shown below:
+After experimenting with these methods in the `reviews_analyzer.ipynb`. After running this, the cleaning label we get is stored in the `predicted_reviews.csv`. Then we can use the label we cleaned for the machine learning pipeline, and we get the result as the table shown below:
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/133a11ac-fd7d-4e0c-945b-b685511cb3bc" width="800" height="150">
    <p>Unsupervised methods for label errors</p>
 </div>
 
 5. **spelling error**
-In terms of spelling error, the function `random_replace_column` in the `error_generator.py` can be used to simulate these errors. For instance, now the label is 'fit', 'large', 'small'. We can add random character into it, then it will become like 'fit' 'fat' 'small' 'smaal' 'laage'. Then, we can use the function `random_replace_column` in `data_cleaner.py` to detect and clean these errors, the basic idea of it is KNN too.
+In terms of spelling errors, the function `random_replace_column` in the `error_generator.py` can be used to simulate these errors. For instance, now the label is 'fit', 'large', and 'small'. We can add random characters into it, then it will become like 'fit' 'fat' 'small' 'small' 'large'. Then, we can use the function `random_replace_column` in `data_cleaner.py` to detect and clean these errors, the basic idea of it is KNN too.
 <div align=center>
    <img src="https://github.com/calvinhaooo/Error-Simulation-in-ML/assets/145265103/35b5a4f1-ad27-4aef-99b7-c8aff22926d9" width="800" height="150">
    <p>Unsupervised methods for spelling errors</p>
